@@ -7,9 +7,15 @@ const Ghost = function (x, y, cor) {
   this.cor = cor
   this.direcaoAtual = direcao.naoDefinida
   this.listaDirecoes = []
+  this.assustado = 0
 
   this.desenhar = function(ct) {
-    ct.fillStyle = this.cor
+    if(this.assustado == 0) {
+      ct.fillStyle = this.cor
+    }
+    else {
+      ct.fillStyle = "rgba(255,255,255,0.8)"
+    }
     ct.fillRect(this.x * largura, this.y * largura,largura,largura)
   }
 
@@ -83,6 +89,10 @@ const Ghost = function (x, y, cor) {
   }
 
   this.mover = function() {
+    if(this.assustado > 0) {
+      this.assustado--
+    }
+
     this.checarDirecoes()
     let movimento = direcao.naoDefinida
     let aleatorio = Math.random()
@@ -119,7 +129,29 @@ const Ghost = function (x, y, cor) {
     }    
   }
 
+  this.assustar = function() {
+    this.assustado = 30
+    switch(this.direcaoAtual) {
+      case direcao.cima:
+        this.direcaoAtual = direcao.baixo
+        break
+      case direcao.baixo:
+        this.direcaoAtual = direcao.cima
+        break
+      case direcao.esquerda:
+        this.direcaoAtual = direcao.direita
+        break
+      case direcao.direita:
+        this.direcaoAtual = direcao.esquerda
+        break  
+    }
+  }
 
+  this.devorado = function() {
+    this.assustado = 0
+    this.x = this.xi
+    this.y = this.yi
+  }
 }
 
 Ghost.cores = []

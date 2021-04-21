@@ -34,6 +34,7 @@ ctx.fillRect(20,30,50,100)
 
 function newGame() {
   paused = false
+  btnStartStop.disabled = false
   startStop()
   cenario.mapa = []
   ghosts.length = 0
@@ -200,10 +201,50 @@ function startStop() {
 
 function atualizaGhosts() {
   moverGhosts()
+  if(verificaColisoes()) {
+    gameOver()
+  }
   desenharTudo()
 }
 
 function atualizaPacman() {
   moverPacman()
+  if(verificaColisoes()) {
+    gameOver()
+  }
   desenharTudo()
 }
+
+function verificaColisoes() {
+  //Comer ponto
+  if(cenario.mapa[py][px] == cenario.ponto) {
+    cenario.mapa[py][px] = cenario.vazio
+  }
+  // Comer do poder
+  else if(cenario.mapa[py][px] == cenario.poder) {
+    for(let i = 0; i < ghosts.length; i++) {
+      ghosts[i].assustar()
+      cenario.mapa[py][px] = cenario.vazio
+    }
+  }
+
+  //Colisao com fantasmas
+  for(let i = 0; i < ghosts.length; i++) {
+    if(px == ghosts[i].x && py == ghosts[i].y) {
+      if(ghosts[i].assustado == 0) {
+        return true
+      }
+      else {
+        ghosts[i].devorado()
+      }
+    }
+  }
+  return false
+}
+
+function gameOver() {
+  pausar()
+  btnStartStop.disabled = true
+  btnStartStop.textContent = "Game Over!"
+}
+
