@@ -1,8 +1,20 @@
+// Variaveis inicialização
+let nx = 0, ny = 0
+let px = -1, py = -1
+const ghosts = []
+let relogio = null
+let relogioGhosts = null
+let paused = false
+
+// Canvas
 const canvas = document.getElementById("tela")
 const ctx = canvas.getContext('2d')
-const btnPaused = document.querySelector('.btnPaused')
+
+//Botões
+const btnStartStop = document.querySelector('.btnStartStop')
 const btnNewGame = document.querySelector('.btnNewGame')
 
+// Imagens para canvas
 let ponto = new Image()
 let poder = new Image()
 
@@ -16,16 +28,13 @@ poder.onload = function() {
 ponto.src = "../img/ponto.png"
 poder.src = "../img/poder.png"
 
-const ghosts = []
-
-let nx = 0, ny = 0
-let px = -1, py = -1
-
 //Só para teste
 ctx.fillStyle = "#FF0000"
 ctx.fillRect(20,30,50,100)
 
 function newGame() {
+  paused = false
+  startStop()
   cenario.mapa = []
   ghosts.length = 0
   let nGhosts = 0
@@ -51,16 +60,12 @@ function newGame() {
       }
     }
   }
-
-  btnPaused.disabled = false
-  btnPaused.innerHTML = 'Start'
-
   desenharTudo()
 }
 
 function desenharTudo() {
   // limpar a tela
-  console.log(nx, ny)
+  console.log(px, py)
   ctx.clearRect(0,0,canvas.width, canvas.height)
 
   // Cenario
@@ -113,10 +118,6 @@ function onKD(evt) {
   if(evt.keyCode == teclas.baixo) {
     setaBaixo = true
   }  
-
-  moverGhosts()
-  moverPacman()
-  desenharTudo()  
 }
 
 function moverPacman() {
@@ -170,4 +171,39 @@ function moverGhosts() {
   for(let i = 0; i < ghosts.length; i++) {
     ghosts[i].mover()
   }
+}
+
+function pausar() {
+  clearInterval(relogio)
+  clearInterval(relogioGhosts)
+  relogio = null
+  relogioGhosts = null 
+  btnStartStop.textContent = "Start"
+  paused = true
+}
+
+function play() {
+  relogio = setInterval("atualizaPacman()", intervalo)
+  relogioGhosts = setInterval("atualizaGhosts()", Math.round(intervalo * 1.2))
+  btnStartStop.textContent = "Pause"
+  paused = false
+}
+
+function startStop() {
+  if(paused) {
+    play()
+  }
+  else {
+    pausar()
+  }
+}
+
+function atualizaGhosts() {
+  moverGhosts()
+  desenharTudo()
+}
+
+function atualizaPacman() {
+  moverPacman()
+  desenharTudo()
 }

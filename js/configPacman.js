@@ -1,4 +1,5 @@
 const largura = 25
+const intervalo = 300
 
 const cenario = function() {}
 const direcao = function() {}
