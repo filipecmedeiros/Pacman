@@ -7,11 +7,9 @@ let ponto = new Image()
 let poder = new Image()
 
 ponto.onload = function(){
-  console.log('Olá, sou função ponto')
   desenharTudo
 }
 poder.onload = function() {
-  console.log('Olá, sou função poder')
   desenharTudo
 }
 
@@ -28,7 +26,6 @@ ctx.fillStyle = "#FF0000"
 ctx.fillRect(20,30,50,100)
 
 function newGame() {
-  console.log('Olá, sou função newGame')
   cenario.mapa = []
   ghosts.length = 0
   let nGhosts = 0
@@ -116,6 +113,8 @@ function onKD(evt) {
   if(evt.keyCode == teclas.baixo) {
     setaBaixo = true
   }  
+
+  moverGhosts()
   moverPacman()
   desenharTudo()  
 }
@@ -167,4 +166,8 @@ function moverPacman() {
   }    
 }
 
-// Movimentação fantasma página 67
+function moverGhosts() {
+  for(let i = 0; i < ghosts.length; i++) {
+    ghosts[i].mover()
+  }
+}
