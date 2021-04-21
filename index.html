@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jogo de Pac-Man - Universidade Católica de Pernambuco</title>
+  <title>Pac-Man - Universidade Católica de Pernambuco</title>
   <link rel="stylesheet" href="styles/style.css">
   <script src="js/cenarioCriado.js"></script>
   <script src="js/configPacman.js"></script>
@@ -21,7 +21,14 @@
       <button class="btn btnNewGame" onclick="newGame()">New Game</button>
       <button class="btn btnStartStop" onclick="startStop()">Start</button>
       <button class="btn btnSave" onclick="saveGame()">Save</button>
-      <button class="btn btnLoad" onclick="loadGame()">Load</button>
+      <label class="btn btnLoad">
+        <input type="file" id="fileToLoad" onchange="loadGame()" name="Load">
+        <i> Load</i>
+      </label>
+      <span id="score" class="btn">
+        Score: 0
+      </span>
+
     </div>
   </div>
 

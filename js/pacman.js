@@ -5,6 +5,8 @@ const ghosts = []
 let relogio = null
 let relogioGhosts = null
 let paused = false
+let score = 0
+
 
 // Canvas
 const canvas = document.getElementById("tela")
@@ -28,11 +30,26 @@ poder.onload = function() {
 ponto.src = "../img/ponto.png"
 poder.src = "../img/poder.png"
 
-//Só para teste
-ctx.fillStyle = "#FF0000"
-ctx.fillRect(20,30,50,100)
+function loadGame(){
+  var fileToLoad = document.getElementById("fileToLoad").files[0];
+  var fileReader = new FileReader();
+  fileReader.onload = function(fileLoadedEvent){ 
+      f = fileLoadedEvent.target.result;
+      console.log(f)
+      let data = JSON.parse(f);
+      atualizarScore(data["score"])
+  };
+  fileReader.readAsText(fileToLoad, "UTF-8");
+}
+
+
+function atualizarScore(novoScore){
+  score = novoScore
+  document.getElementById('score').innerText = 'Score: ' + score;
+}
 
 function newGame() {
+  atualizarScore(0)
   paused = false
   btnStartStop.disabled = false
   startStop()
@@ -66,11 +83,10 @@ function newGame() {
 
 function desenharTudo() {
   // limpar a tela
-  console.log(px, py)
   ctx.clearRect(0,0,canvas.width, canvas.height)
 
   // Cenario
-  ctx.fillStyle = "#9999EE"
+  ctx.fillStyle = "#3430FE"
   for(y = 0; y < ny; y++) {
     for(x = 0; x < nx; x++) {
       if(cenario.mapa[y][x] == cenario.parede) {
@@ -86,7 +102,7 @@ function desenharTudo() {
   }
 
   // Pacman
-  ctx.fillStyle = "#FFB00F"
+  ctx.fillStyle = "#FFFF01"
   ctx.beginPath()
   ctx.arc(px * largura + (largura / 2), py * largura + (largura / 2), largura / 2, Math.PI * 2, false)
   ctx.closePath()
@@ -218,13 +234,15 @@ function atualizaPacman() {
 function verificaColisoes() {
   //Comer ponto
   if(cenario.mapa[py][px] == cenario.ponto) {
-    cenario.mapa[py][px] = cenario.vazio
+    atualizarScore(score+10);
+    cenario.mapa[py][px] = cenario.vazio;
   }
   // Comer do poder
   else if(cenario.mapa[py][px] == cenario.poder) {
+    atualizarScore(score+10)
     for(let i = 0; i < ghosts.length; i++) {
-      ghosts[i].assustar()
-      cenario.mapa[py][px] = cenario.vazio
+      ghosts[i].assustar();
+      cenario.mapa[py][px] = cenario.vazio;
     }
   }
 
@@ -236,6 +254,7 @@ function verificaColisoes() {
       }
       else {
         ghosts[i].devorado()
+        atualizarScore(score+50)
       }
     }
   }

@@ -1,5 +1,5 @@
 body {
-  background-color: #DDFFDD;
+  background-color: #000000;
   text-align: center;
 }
 
@@ -54,6 +54,10 @@ body {
 .btn:active {
   position:relative;
   top:1px;
+}
+
+input[type="file"] {
+    display: none;
 }
 
 .btn:disabled {
