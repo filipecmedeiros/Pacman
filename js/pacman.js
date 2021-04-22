@@ -31,12 +31,12 @@ ponto.src = "../img/ponto.png"
 poder.src = "../img/poder.png"
 
 function loadGame(){
-  var fileToLoad = document.getElementById("fileToLoad").files[0];
-  var fileReader = new FileReader();
+  var fileToLoad = document.getElementById("fileToLoad").files[0]
+  var fileReader = new FileReader()
   fileReader.onload = function(fileLoadedEvent){ 
-      f = fileLoadedEvent.target.result;
+      f = fileLoadedEvent.target.result
       console.log(f)
-      let data = JSON.parse(f);
+      let data = JSON.parse(f)
       atualizarScore(data["score"])
       px = data["pacman-x"]
       py = data["pacman-y"]
@@ -46,28 +46,29 @@ function loadGame(){
       }
       cenario.mapa = data["cenario"]
       desenharTudo()
-      document.getElementById("fileToLoad").value = null;
+      btnStartStop.disabled = false
+      document.getElementById("fileToLoad").value = null
   };
-  fileReader.readAsText(fileToLoad, "UTF-8");
+  fileReader.readAsText(fileToLoad, "UTF-8")
 }
 
 function saveGame(){
-    pausar();
+    pausar()
     jsonData = {"score": score, "pacman-y":py, "pacman-x": px, "ghosts":ghosts, "cenario": cenario.mapa}
-    let dataStr = JSON.stringify(jsonData);
-    let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+    let dataStr = JSON.stringify(jsonData)
+    let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr)
 
-    let exportFileDefaultName = 'pacman.json';
+    let exportFileDefaultName = 'pacman.json'
 
-    let linkElement = document.createElement('a');
-    linkElement.setAttribute('href', dataUri);
-    linkElement.setAttribute('download', exportFileDefaultName);
-    linkElement.click();
+    let linkElement = document.createElement('a')
+    linkElement.setAttribute('href', dataUri)
+    linkElement.setAttribute('download', exportFileDefaultName)
+    linkElement.click()
 }
 
 function atualizarScore(novoScore){
   score = novoScore
-  document.getElementById('score').innerText = 'Score: ' + score;
+  document.getElementById('score').innerText = 'Score: ' + score
 }
 
 function newGame() {
