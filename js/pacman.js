@@ -71,7 +71,7 @@ function newGame() {
   let nGhosts = 0
 
   for(i = 0; i < cenarioCriado.length; i++){
-    cenario.mapa.push(cenarioCriado[i])
+    cenario.mapa.push(cenarioCriado[i].slice(0))
   }
 
   nx = cenario.mapa[0].length
@@ -151,49 +151,50 @@ function onKD(evt) {
 }
 
 function moverPacman() {
+  console.log(py, px)
   if(setaDireita) {
     setaDireita = false
     if(px + 1 < nx) {
       if(cenario.mapa[py][px+1] != cenario.parede) {
         px++
       }
-      else if(cenario.mapa[py][0] != cenario.parede) {
-        px = 0
-      }
-    }
+    } 
+    else if(cenario.mapa[py][0] != cenario.parede) {
+      px = 0
+    }    
   }
-  if(setaEsquerda) {
+  else if(setaEsquerda) {
     setaEsquerda = false
     if(px - 1 >= 0) {
       if(cenario.mapa[py][px-1] != cenario.parede) {
         px--
       }
-      else if(cenario.mapa[py][nx - 1] != cenario.parede) {
-        px = nx - 1
-      }
     }
+    else if(cenario.mapa[py][nx - 1] != cenario.parede) {
+      px = nx - 1
+    }    
   }
-  if(setaCima) {
+  else if(setaCima) {
     setaCima = false
     if(py - 1 >= 0) {
       if(cenario.mapa[py-1][px] != cenario.parede) {
         py--
       }
-      else if(cenario.mapa[ny - 1][px] != cenario.parede) {
-        py = ny - 1
-      }
     }
+    else if(cenario.mapa[ny - 1][px] != cenario.parede) {
+      py = ny - 1
+    }    
   }
-  if(setaBaixo) {
+  else if(setaBaixo) {
     setaBaixo = false
     if(py + 1 < ny) {
       if(cenario.mapa[py + 1][px] != cenario.parede) {
         py++
       }
-      else if(cenario.mapa[0][px] != cenario.parede) {
-        py = 0
-      }
     }
+    else if(cenario.mapa[0][px] != cenario.parede) {
+      py = 0
+    }    
   }    
 }
 

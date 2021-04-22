@@ -104,7 +104,7 @@ const Ghost = function (x, y, cor) {
     else {
       chance = (1 - Ghost.chanceMovIgual) / (this.listaDirecoes.length - 1)
 
-      for(let ca = 1; ca < this.listaDirecoes.length; ca++) {
+      for(ca = 1; ca < this.listaDirecoes.length; ca++) {
         if(aleatorio < Ghost.chanceMovIgual + (ca * chance)) {
           movimento = this.listaDirecoes[ca]
           break
@@ -115,17 +115,42 @@ const Ghost = function (x, y, cor) {
     this.direcaoAtual = movimento;
     switch(movimento){
       case direcao.cima:
-        this.y--;
-        break;
+        if(this.y < 0) {
+          this.y = ny - 1
+        }
+        else {
+          this.y--
+        }
+        break
       case direcao.baixo:
-        this.y++;
-        break;
+        if(this.y >= ny) {
+          this.y = 0
+          this.x = (nx - 1)/2
+        }
+        else {
+          this.y++
+        }
+        break
       case direcao.esquerda:
-        this.x--;
-        break;
+        if(this.x < 0){
+          this.x = nx - 1
+          this.y = ny/2
+        }
+        else {
+          this.x--
+        }
+        break
       case direcao.direita:
-        this.x++;
-        break;
+        if(this.x >= nx) {
+          this.x = 0
+          this.y = (ny - 1)/2
+        }
+        else {
+          this.x++
+        }  
+        break
+      default:
+        break  
     }    
   }
 
