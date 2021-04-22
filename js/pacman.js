@@ -1,7 +1,7 @@
 // Variaveis inicialização
 let nx = 0, ny = 0
 let px = -1, py = -1
-const ghosts = []
+let ghosts = []
 let relogio = null
 let relogioGhosts = null
 let paused = false
@@ -38,13 +38,22 @@ function loadGame(){
       console.log(f)
       let data = JSON.parse(f);
       atualizarScore(data["score"])
+      px = data["pacman-x"]
+      py = data["pacman-y"]
+      ghosts = []
+      for (i=0; i<data["ghosts"].length; i++){
+        ghosts.push(new Ghost(data["ghosts"][i]["x"], data["ghosts"][i]["y"], data["ghosts"][i]["cor"]))
+      }
+      cenario.mapa = data["cenario"]
+      desenharTudo()
       document.getElementById("fileToLoad").value = null;
   };
   fileReader.readAsText(fileToLoad, "UTF-8");
 }
 
 function saveGame(){
-    jsonData = {"score": score}
+    pausar();
+    jsonData = {"score": score, "pacman-y":py, "pacman-x": px, "ghosts":ghosts, "cenario": cenario.mapa}
     let dataStr = JSON.stringify(jsonData);
     let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
 
@@ -54,7 +63,6 @@ function saveGame(){
     linkElement.setAttribute('href', dataUri);
     linkElement.setAttribute('download', exportFileDefaultName);
     linkElement.click();
-
 }
 
 function atualizarScore(novoScore){
