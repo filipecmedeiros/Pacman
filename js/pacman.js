@@ -38,6 +38,7 @@ function loadGame(){
       console.log(f)
       let data = JSON.parse(f);
       atualizarScore(data["score"])
+      document.getElementById("fileToLoad").value = null;
   };
   fileReader.readAsText(fileToLoad, "UTF-8");
 }
@@ -47,7 +48,7 @@ function saveGame(){
     let dataStr = JSON.stringify(jsonData);
     let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
 
-    let exportFileDefaultName = 'saved_game.json';
+    let exportFileDefaultName = 'pacman.json';
 
     let linkElement = document.createElement('a');
     linkElement.setAttribute('href', dataUri);
