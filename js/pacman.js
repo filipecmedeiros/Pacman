@@ -66,8 +66,8 @@ function newGame() {
   ghosts.length = 0
   let nGhosts = 0
 
-  for(i = 0; i < cenarioCriado.length; i++){
-    cenario.mapa.push(cenarioCriado[i].slice(0))
+  for(i = 0; i < cenarioCriado1.length; i++){
+    cenario.mapa.push(cenarioCriado1[i].slice(0))
   }
 
   nx = cenario.mapa[0].length
