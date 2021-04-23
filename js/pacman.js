@@ -16,20 +16,6 @@ const ctx = canvas.getContext('2d')
 const btnStartStop = document.querySelector('.btnStartStop')
 const btnNewGame = document.querySelector('.btnNewGame')
 
-// Imagens para canvas
-let ponto = new Image()
-let poder = new Image()
-
-ponto.onload = function(){
-  desenharTudo
-}
-poder.onload = function() {
-  desenharTudo
-}
-
-ponto.src = "../img/ponto.png"
-poder.src = "../img/poder.png"
-
 function loadGame(){
   var fileToLoad = document.getElementById("fileToLoad").files[0]
   var fileReader = new FileReader()
@@ -107,19 +93,24 @@ function newGame() {
 function desenharTudo() {
   // limpar a tela
   ctx.clearRect(0,0,canvas.width, canvas.height)
-
   // Cenario
-  ctx.fillStyle = "#3430FE"
+  
   for(y = 0; y < ny; y++) {
     for(x = 0; x < nx; x++) {
       if(cenario.mapa[y][x] == cenario.parede) {
+        ctx.fillStyle = "#3430FE"
         ctx.fillRect(x * largura, y * largura, largura, largura)
       }
       else if(cenario.mapa[y][x] == cenario.ponto) {
-        ctx.drawImage(ponto, x * largura, y * largura, largura, largura)
+        ctx.fillStyle = "#FEB630"
+        ctx.fillRect((x * largura) + (largura/3), (y * largura) + (largura/3), largura/4, largura/4)
       }
       else if(cenario.mapa[y][x] == cenario.poder) {
-        ctx.drawImage(poder, x * largura, y * largura, largura, largura)
+        ctx.fillStyle = "#B43A23"
+        ctx.beginPath()
+        ctx.arc(x * largura + (largura / 2), y * largura + (largura / 2), largura / 4, Math.PI * 2, false)
+        ctx.closePath()
+        ctx.fill()        
       }
     }
   }
@@ -291,3 +282,4 @@ function gameOver() {
   btnStartStop.textContent = "Game Over!"
 }
 
+newGame()
