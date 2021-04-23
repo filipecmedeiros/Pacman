@@ -6,22 +6,32 @@ let relogio = null
 let relogioGhosts = null
 let paused = false
 let score = 0
+let level = intervalo
+
+let cabCima, cabBaixo, cabEsquerda, cabDireita
+
+let setaCima = false
+let setaBaixo = false
+let setaEsquerda = false
+let setaDireita = false
 
 
 // Canvas
 const canvas = document.getElementById("tela")
 const ctx = canvas.getContext('2d')
 
-//Botões
+//Elementos HTML
 const btnStartStop = document.querySelector('.btnStartStop')
 const btnNewGame = document.querySelector('.btnNewGame')
+const btnSave = document.querySelector('.btnSave')
+const imgGameOver = document.querySelector(".gameOver")
 
 function loadGame(){
   var fileToLoad = document.getElementById("fileToLoad").files[0]
   var fileReader = new FileReader()
   fileReader.onload = function(fileLoadedEvent){ 
       f = fileLoadedEvent.target.result
-      console.log(f)
+      // console.log(f)
       let data = JSON.parse(f)
       atualizarScore(data["score"])
       px = data["pacman-x"]
@@ -57,8 +67,8 @@ function atualizarScore(novoScore){
   document.getElementById('score').innerText = 'Score: ' + score
 }
 
-function newGame() {
-  atualizarScore(0)
+function newGame(score) {
+  atualizarScore(score)
   paused = false
   btnStartStop.disabled = false
   startStop()
@@ -88,6 +98,9 @@ function newGame() {
     }
   }
   desenharTudo()
+  imgGameOver.style.display = "none"
+  btnStartStop.classList.add('btnGreen')
+  btnNewGame.classList.remove('btnGreen')
 }
 
 function desenharTudo() {
@@ -116,11 +129,83 @@ function desenharTudo() {
   }
 
   // Pacman
-  ctx.fillStyle = "#FFFF01"
-  ctx.beginPath()
-  ctx.arc(px * largura + (largura / 2), py * largura + (largura / 2), largura / 2, Math.PI * 2, false)
-  ctx.closePath()
-  ctx.fill()
+  function pacman() {
+    if(cabCima) {
+      // Cabeça pra cima
+      ctx.beginPath();
+      ctx.arc(px * largura + (largura / 2), py * largura + (largura / 2), largura/2, 1.75 * Math.PI, 2.75 * Math.PI, false);
+      ctx.fillStyle = "rgb(255, 255, 0)";
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(px * largura + (largura / 2), py * largura + (largura / 2), largura/2, 2.25 * Math.PI, 3.25 * Math.PI, false);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(px * largura + (largura / 3.75), py * largura + largura/1.50 , largura/8, 0, 2 * Math.PI, false);
+      ctx.fillStyle = "rgb(0, 0, 0)";
+      ctx.fill();      
+    }
+    else if(cabBaixo) {
+      // Cabeça para baixo
+      ctx.beginPath();
+      ctx.arc(px * largura + (largura / 2), py * largura + (largura / 2), largura/2, 0.75 * Math.PI, 1.75 * Math.PI, false);
+      ctx.fillStyle = "rgb(255, 255, 0)";
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(px * largura + (largura / 2), py * largura + (largura / 2), largura/2, 1.25 * Math.PI, 2.25 * Math.PI, false);
+      ctx.fill();
+      ctx.beginPath();
+      //olhos
+      ctx.arc(px * largura + (largura / 1.25), py * largura + (largura / 3), largura/8, 0, 2 * Math.PI, false);
+      ctx.fillStyle = "rgb(0, 0, 0)";
+      ctx.fill();      
+    }
+    else if(cabDireita) {
+      // Cabeça para direita
+      ctx.beginPath();
+      ctx.arc(px * largura + (largura / 2), py * largura + (largura / 2), largura/2, 0.25 * Math.PI, 1.25 * Math.PI, false);
+      ctx.fillStyle = "rgb(255, 255, 0)";
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(px * largura + (largura / 2), py * largura + (largura / 2), largura/2, 0.75 * Math.PI, 1.75 * Math.PI, false);
+      ctx.fill();
+      ctx.beginPath();
+      //Olhos
+      ctx.arc(px * largura + (largura / 2), py * largura + (largura / 5), largura/8, 0, 2 * Math.PI, false);
+      ctx.fillStyle = "rgb(0, 0, 0)";
+      ctx.fill();      
+    }
+    else if(cabEsquerda) {
+      // Cabeça para esquerda
+      ctx.beginPath();
+      ctx.arc(px * largura + (largura / 2), py * largura + (largura / 2), largura/2, -0.25 * Math.PI, -1.25 * Math.PI, false);
+      ctx.fillStyle = "rgb(255, 255, 0)";
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(px * largura + (largura / 2), py * largura + (largura / 2), largura/2, -0.75 * Math.PI, -1.75 * Math.PI, false);
+      ctx.fill();
+      ctx.beginPath();    
+      //Olhos
+      ctx.arc(px * largura + (largura / 2), py * largura + (largura / 5), largura/8, 0, 2 * Math.PI, false);
+      ctx.fillStyle = "rgb(0, 0, 0)";
+      ctx.fill();      
+    }
+    else {
+      ctx.beginPath();
+      ctx.arc(px * largura + (largura / 2), py * largura + (largura / 2), largura/2, 0.25 * Math.PI, 1.25 * Math.PI, false);
+      ctx.fillStyle = "rgb(255, 255, 0)";
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(px * largura + (largura / 2), py * largura + (largura / 2), largura/2, 0.75 * Math.PI, 1.75 * Math.PI, false);
+      ctx.fill();
+      ctx.beginPath();
+      //Olhos
+      ctx.arc(px * largura + (largura / 2), py * largura + (largura / 5), largura/8, 0, 2 * Math.PI, false);
+      ctx.fillStyle = "rgb(0, 0, 0)";
+      ctx.fill();         
+    }
+  }
+
+  pacman()
 
   // Fantasmas
   for(i = 0; i < ghosts.length; i++) {
@@ -128,31 +213,41 @@ function desenharTudo() {
   }
 }
 
-
 // evento de tecla para método onKD
 document.onkeydown = onKD
-let setaCima = false
-let setaBaixo = false
-let setaEsquerda = false
-let setaDireita = false
 
 function onKD(evt) {
   if(evt.keyCode == teclas.direita) {
     setaDireita = true
+    cabDireita = true
+    cabEsquerda = false
+    cabCima = false
+    cabBaixo = false
   }
   if(evt.keyCode == teclas.esquerda) {
     setaEsquerda = true
+    cabDireita = false
+    cabEsquerda = true
+    cabCima = false
+    cabBaixo = false
   }
   if(evt.keyCode == teclas.cima) {
     setaCima = true
+    cabDireita = false
+    cabEsquerda = false
+    cabCima = true
+    cabBaixo = false
   }
   if(evt.keyCode == teclas.baixo) {
     setaBaixo = true
+    cabDireita = false
+    cabEsquerda = false
+    cabCima = false
+    cabBaixo = true
   }  
 }
 
 function moverPacman() {
-  console.log(py, px)
   if(setaDireita) {
     setaDireita = false
     if(px + 1 < nx) {
@@ -196,7 +291,8 @@ function moverPacman() {
     else if(cenario.mapa[0][px] != cenario.parede) {
       py = 0
     }    
-  }    
+  }
+  newLevel(score)
 }
 
 function moverGhosts() {
@@ -211,13 +307,17 @@ function pausar() {
   relogio = null
   relogioGhosts = null 
   btnStartStop.textContent = "Start"
+  btnStartStop.classList.add('btnGreen')
+  btnStartStop.classList.remove('btnRed')
   paused = true
 }
 
 function play() {
   relogio = setInterval("atualizaPacman()", intervalo)
-  relogioGhosts = setInterval("atualizaGhosts()", Math.round(intervalo * 1.2))
+  relogioGhosts = setInterval("atualizaGhosts()", Math.round(level * 1.2))
   btnStartStop.textContent = "Pause"
+  btnStartStop.classList.add('btnRed')
+  btnStartStop.classList.remove('btnGreen')
   paused = false
 }
 
@@ -276,10 +376,38 @@ function verificaColisoes() {
   return false
 }
 
-function gameOver() {
-  pausar()
-  btnStartStop.disabled = true
-  btnStartStop.textContent = "Game Over!"
+function newLevel(score) {
+  let searchPoint = false
+  let searchPower = false
+
+  for(let y = 0; y < ny; y++) {
+    for(let x = 0; x < nx; x++) {
+      if(cenario.mapa[y][x] == cenario.ponto) {
+        searchPoint = true
+      }
+      if(cenario.mapa[y][x] == cenario.poder) {
+        searchPower = true
+      }
+    }
+  }
+
+  if(searchPoint || searchPower) {
+    return
+  }
+  else {
+    newGame(score)
+    level = level - 100
+  }
 }
 
-newGame()
+function gameOver() {
+  pausar()
+  imgGameOver.style.display = "block"
+  btnStartStop.disabled = true
+  btnSave.disabled = true
+  btnStartStop.textContent = "Game Over!"
+  btnStartStop.classList.remove('btnGreen')
+  btnNewGame.classList.add('btnGreen')
+}
+
+newGame(0)
