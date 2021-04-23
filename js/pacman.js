@@ -41,8 +41,10 @@ function loadGame(){
         ghosts.push(new Ghost(data["ghosts"][i]["x"], data["ghosts"][i]["y"], data["ghosts"][i]["cor"]))
       }
       cenario.mapa = data["cenario"]
+      level = data["level"]
       desenharTudo()
       btnStartStop.disabled = false
+      imgGameOver.style.display = "none"
       document.getElementById("fileToLoad").value = null
   };
   fileReader.readAsText(fileToLoad, "UTF-8")
@@ -50,7 +52,7 @@ function loadGame(){
 
 function saveGame(){
     pausar()
-    jsonData = {"score": score, "pacman-y":py, "pacman-x": px, "ghosts":ghosts, "cenario": cenario.mapa}
+    jsonData = {"score": score, "pacman-y":py, "pacman-x": px, "ghosts":ghosts, "cenario": cenario.mapa, "level":level}
     let dataStr = JSON.stringify(jsonData)
     let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr)
 
@@ -68,6 +70,7 @@ function atualizarScore(novoScore){
 }
 
 function newGame(score) {
+  console.log(level)
   atualizarScore(score)
   paused = false
   btnStartStop.disabled = false
