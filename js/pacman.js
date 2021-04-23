@@ -25,6 +25,7 @@ const btnStartStop = document.querySelector('.btnStartStop')
 const btnNewGame = document.querySelector('.btnNewGame')
 const btnSave = document.querySelector('.btnSave')
 const imgGameOver = document.querySelector(".gameOver")
+const imgYouWIN = document.querySelector(".youWIN")
 
 function loadGame(){
   var fileToLoad = document.getElementById("fileToLoad").files[0]
@@ -44,10 +45,13 @@ function loadGame(){
       level = data["level"]
       desenharTudo()
       btnStartStop.disabled = false
+      btnSave.disabled = false
       imgGameOver.style.display = "none"
+      imgYouWIN.style.display = "none"
       document.getElementById("fileToLoad").value = null
   };
   fileReader.readAsText(fileToLoad, "UTF-8")
+  btnNewGame.classList.remove('btnGreen')
 }
 
 function saveGame(){
@@ -67,10 +71,10 @@ function saveGame(){
 function atualizarScore(novoScore){
   score = novoScore
   document.getElementById('score').innerText = 'Score: ' + score
+  document.getElementById('level').innerText = 'Level: ' + (intervalo - level)/100
 }
 
 function newGame(score) {
-  console.log(level)
   atualizarScore(score)
   paused = false
   btnStartStop.disabled = false
@@ -102,6 +106,7 @@ function newGame(score) {
   }
   desenharTudo()
   imgGameOver.style.display = "none"
+  imgYouWIN.style.display = "none"
   btnStartStop.classList.add('btnGreen')
   btnNewGame.classList.remove('btnGreen')
 }
@@ -268,8 +273,7 @@ function moverPacman() {
       if(cenario.mapa[py][px-1] != cenario.parede) {
         px--
       }
-    }
-    else if(cenario.mapa[py][nx - 1] != cenario.parede) {
+    }    else if(cenario.mapa[py][nx - 1] != cenario.parede) {
       px = nx - 1
     }    
   }
@@ -296,6 +300,7 @@ function moverPacman() {
     }    
   }
   newLevel(score)
+  winGame()
 }
 
 function moverGhosts() {
@@ -322,6 +327,7 @@ function play() {
   btnStartStop.classList.add('btnRed')
   btnStartStop.classList.remove('btnGreen')
   paused = false
+  console.log(level)
 }
 
 function startStop() {
@@ -400,6 +406,20 @@ function newLevel(score) {
   else {
     newGame(score)
     level = level - 100
+    atualizarScore(score)
+  }
+}
+
+function winGame() {
+  if(level < 100) {
+    pausar()
+    imgYouWIN.style.display = "block"
+    btnStartStop.disabled = true
+    btnSave.disabled = true    
+    btnStartStop.textContent = "You win!"
+    btnStartStop.classList.remove('btnGreen')
+    btnNewGame.classList.add('btnGreen')
+    level = intervalo
   }
 }
 
@@ -412,5 +432,5 @@ function gameOver() {
   btnStartStop.classList.remove('btnGreen')
   btnNewGame.classList.add('btnGreen')
 }
-
+ 
 newGame(0)

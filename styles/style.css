@@ -26,6 +26,12 @@ body {
   order: 3
 }
 
+.youWIN {
+  display: none;
+  position: absolute;
+  order: 4  
+}
+
 .btn {
   margin-top: .8rem;
   -moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
@@ -136,8 +142,20 @@ input[type="file"] {
 	top:1px;
 }
 
+.information {
+  display: flex;
+  width: 975px;
+  justify-content: space-between;
+}
 
 #score {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: yellow
+}
+
+#level {
   font-family: 'Courier New', Courier, monospace;
   font-size: 1.4rem;
   font-weight: bold;

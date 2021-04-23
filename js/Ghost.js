@@ -14,9 +14,18 @@ const Ghost = function (x, y, cor) {
       ct.fillStyle = this.cor
     }
     else {
-      ct.fillStyle = "rgba(255,255,255,0.8)"
+      ct.fillStyle = "rgba(255,255,255)"
     }
     ct.fillRect(this.x * largura, this.y * largura,largura,largura)
+    ctx.beginPath();
+    ctx.arc(this.x * largura + (largura / 4), this.y * largura + (largura / 4), largura/8, 0, 2 * Math.PI, false);
+    ctx.fillStyle = "rgb(0, 0, 0)";
+    ctx.fill();     
+    
+    ctx.beginPath();
+    ctx.arc(this.x * largura + (largura / 1.5), this.y * largura + (largura / 4), largura/8, 0, 2 * Math.PI, false);
+    ctx.fillStyle = "rgb(0, 0, 0)";
+    ctx.fill();         
   }
 
   this.checarDirecoes = function() {
