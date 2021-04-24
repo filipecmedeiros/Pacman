@@ -82,6 +82,7 @@ function newGame(score) {
   cenario.mapa = []
   ghosts.length = 0
   let nGhosts = 0
+  level = intervalo
 
   for(i = 0; i < cenarioCriado1.length; i++){
     cenario.mapa.push(cenarioCriado1[i].slice(0))
