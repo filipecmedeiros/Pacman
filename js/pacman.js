@@ -34,7 +34,7 @@ function loadGame(){
       f = fileLoadedEvent.target.result
       // console.log(f)
       let data = JSON.parse(f)
-      atualizarScore(data["score"])
+      atualizarScore(data["score"], data["level"])
       px = data["pacman-x"]
       py = data["pacman-y"]
       ghosts = []
@@ -68,21 +68,21 @@ function saveGame(){
     linkElement.click()
 }
 
-function atualizarScore(novoScore){
+function atualizarScore(novoScore, novoLevel){
   score = novoScore
+  level = novoLevel
   document.getElementById('score').innerText = 'Score: ' + score
   document.getElementById('level').innerText = 'Level: ' + (intervalo - level)/100
 }
 
 function newGame(score) {
-  atualizarScore(score)
+  atualizarScore(score, level)
   paused = false
   btnStartStop.disabled = false
   startStop()
   cenario.mapa = []
   ghosts.length = 0
   let nGhosts = 0
-  level = intervalo
 
   for(i = 0; i < cenarioCriado1.length; i++){
     cenario.mapa.push(cenarioCriado1[i].slice(0))
@@ -300,8 +300,6 @@ function moverPacman() {
       py = 0
     }    
   }
-  newLevel(score)
-  winGame()
 }
 
 function moverGhosts() {
@@ -328,7 +326,6 @@ function play() {
   btnStartStop.classList.add('btnRed')
   btnStartStop.classList.remove('btnGreen')
   paused = false
-  console.log(level)
 }
 
 function startStop() {
@@ -354,17 +351,19 @@ function atualizaPacman() {
     gameOver()
   }
   desenharTudo()
+  newLevel(score)
+  winGame()  
 }
 
 function verificaColisoes() {
   //Comer ponto
   if(cenario.mapa[py][px] == cenario.ponto) {
-    atualizarScore(score+10);
+    atualizarScore(score+10, level);
     cenario.mapa[py][px] = cenario.vazio;
   }
   // Comer do poder
   else if(cenario.mapa[py][px] == cenario.poder) {
-    atualizarScore(score+10)
+    atualizarScore(score+10, level)
     for(let i = 0; i < ghosts.length; i++) {
       ghosts[i].assustar();
       cenario.mapa[py][px] = cenario.vazio;
@@ -379,7 +378,7 @@ function verificaColisoes() {
       }
       else {
         ghosts[i].devorado()
-        atualizarScore(score+50)
+        atualizarScore(score+50, level)
       }
     }
   }
@@ -407,7 +406,7 @@ function newLevel(score) {
   else {
     newGame(score)
     level = level - 100
-    atualizarScore(score)
+    atualizarScore(score, level)
   }
 }
 
@@ -432,6 +431,7 @@ function gameOver() {
   btnStartStop.textContent = "Game Over!"
   btnStartStop.classList.remove('btnGreen')
   btnNewGame.classList.add('btnGreen')
+  level = intervalo
 }
  
 newGame(0)
